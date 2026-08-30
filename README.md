@@ -209,3 +209,62 @@ This is a POC. Known rough edges, roughly in priority order:
   50-chunk book would need.
 - **Serial by design.** One chunk is in flight at a time to keep state
   unambiguous; parallel chunks would need a locking convention.
+
+## Possible improvements
+
+Concrete next steps, drawn from what the two runs actually taught us. Grouped by
+theme, roughly in priority order within each.
+
+### Orchestration & reliability
+
+- **Make self-recovery real code, not steering.** The polling heartbeat works,
+  but it depends on the orchestrator *choosing* to follow its instructions, and
+  agents still go idle mid-task. A thin supervisor process with hard timeouts
+  (watching the durable files) would make recovery a guarantee rather than a
+  behaviour.
+- **Stop depending on session restarts to load steering.** `CLAUDE.md` only loads
+  at session start, which caused real coordination overhead every time a role's
+  steering changed. A version stamp the agent re-reads per task (and warns when
+  stale) would remove the restart dance.
+- **Commit on approval.** Each approved chunk as its own commit would give
+  rollback and reviewable diffs (the de-dash and v4 revision passes would have
+  been clean diffs instead of in-place overwrites).
+
+### Measurement & observability
+
+- **Record real wall-clock runtime.** The factory tracks *effort* (rewrites,
+  bounces, stalls) but not duration — the journal timestamps are narrative, not
+  real. Add `started_at` / `ended_at` / `duration_min` to `metrics.csv`, stamped
+  by the orchestrator, so runs are comparable in time as well as effort.
+- **Add cost accounting.** Track tokens/model-cost per run alongside the effort
+  counters, so quality gains can be weighed against what they cost.
+- **Make the eval panel reproducible and authorized.** Run 02 was scored by one
+  model because the panel wasn't authorized; record per-model scores every run so
+  overall means stay comparable across iterations.
+
+### Quality gates (the lesson from run 02)
+
+- **Target pattern families, not literal strings.** The §5c cap on `"the way …"`
+  was gamed — the tic was renamed, not removed (a Goodhart effect). Whole-work
+  checks should match the *construction* (e.g. any analogy opener) or stay an
+  editorial judgment, not a single regex.
+- **Add whole-shape checks for the sticky dimensions.** Pacing resisted per-chunk
+  and count-based fixes. It likely needs a structural pass (present-time cadence
+  across chunks, seam-adjacency) or a dedicated whole-work editorial review.
+- **Prune and consolidate `learnings.md`.** Append-only guidance will bloat and
+  eventually contradict itself over a long run; add periodic consolidation.
+
+### Scaling
+
+- **A maintained story bible.** Continuity still leans on re-reading prior
+  chunks. Auto-update a canon/state doc after each approval so a 50-chunk work
+  stays consistent without quadratic re-reading.
+- **Parallel chunks with a lease/lock convention.** Serial keeps state simple but
+  caps throughput; a per-chunk lease in `progress.md` would let independent
+  chunks run concurrently.
+
+### Generalization
+
+- **Prove the story→software mapping.** Add a software-target spec profile where
+  the mechanical gates are linters/type-checks and the evaluator runs the test
+  suite, to validate that the same orchestration builds code, not just prose.
