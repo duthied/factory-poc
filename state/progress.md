@@ -5,18 +5,25 @@ orchestrator changes status. Seeded from `spec.md` §4 at the start of a run.
 
 ## Summary
 
-- **Spec-Version:** 3
+- **Spec-Version:** 4
 - **Target:** 10,000 words (plus or minus 10%)
-- **Approved so far:** 9709 words
+- **Approved so far:** 10,030 words (10 of 10 re-approved at v4; within 9,000–11,000 tolerance) — run 02 targeted revision pass
 - **Run status:** complete (eval-passed)
 - **Eval rounds used:** 1 of 2
-- **Latest eval:** Round 1 PASS — overall 4.4 / 5, no dimension below 4 (see `state/eval-report.md`)
+- **Latest eval:** Round 1 (run 02) PASS : overall 4.71 / 5 (Opus 5, Gemini 3.7 Flash), no dimension below 4. Arc 5, Ambiguity 5, Voice 5, Pacing 4, Prose 4, Coda 5, Themes 5. See `state/eval-report.md`.
+
+Run 02 is a **revision pass**, not a from-scratch write: run-01 prose scored
+4.1–4.4 across a four-model panel and is preserved. Each chunk is revised in
+place against Spec-Version 4 (§4 reveal ledger, §7 relief-keeper canon, §5a
+extended UK grep, §5b reveal/pacing/relief checks, §5c whole-work gates), then
+re-run through §5a, re-reviewed at §5b, and re-stamped at v4. Light-scope chunks
+get a surgical pass (change only what is named), not a rewrite.
 
 ### Run counters (orchestrator maintains during the run; dumped into the run log at completion)
 
-- Mechanical-gate bounces by type: em/en-dash 0, length 0, prose-only 0, UK-spelling 0, second-person 0
+- Mechanical-gate bounces by type: em/en-dash 0, length 1, prose-only 0, UK-spelling 0, second-person 0
 - Editorial rejects (reviewer FAIL): 1
-- Process friction: 1 — silent stall ~13 min on chunk-04: reviewer's PASS reply dropped; recovered from state/review-log.md (durable source of truth)
+- Process friction: 0
 
 The per-chunk `Retries` column already records total rewrites per chunk; these
 counters break that total down by cause for the run log.
@@ -29,16 +36,16 @@ lower value is stale and gets re-queued for a revision pass.
 
 | # | Title | Status | Words | Retries | Spec-ver | Notes |
 |---|-------|--------|-------|---------|----------|-------|
-| 01 | The Road Back | approved | 1098 | 0 | 3 | passed §5a + §5b |
-| 02 | The Keeper's Room | approved | 1071 | 1 | 3 | passed on rewrite (canon fix) |
-| 03 | The Ledger | approved | 953 | 0 | 3 | passed §5a + §5b |
-| 04 | The Rhythm | approved | 925 | 0 | 3 | passed §5a + §5b (verdict recovered from review-log; live reply dropped) |
-| 05 | What She Stayed For | approved | 999 | 0 | 3 | passed §5a + §5b |
-| 06 | The Automation's Lie | approved | 937 | 0 | 3 | passed §5a + §5b |
-| 07 | The Thing in the Log | approved | 925 | 0 | 3 | passed §5a + §5b (ambiguity peak held) |
-| 08 | The Long Watch | approved | 935 | 0 | 3 | passed §5a + §5b |
-| 09 | First Light | approved | 942 | 0 | 3 | passed §5a + §5b (ch01 callbacks land) |
-| 10 | The Beacon | approved | 924 | 0 | 3 | passed §5a + §5b (final ambiguity holds; recolourings land) |
+| 01 | The Road Back | approved | 1095 | 0 | 4 | v4 revision approved; §5a+§5b pass; the-way 4→1; reveal/relief/recolour continuity confirmed |
+| 02 | The Keeper's Room | approved | 1063 | 0 | 4 | v4 revision approved; §5a+§5b pass; reveal-ownership verified line-by-line (seed only, ch03 discovery preserved); relief coverage affirmed |
+| 03 | The Ledger | approved | 1037 | 1 | 4 | v4 approved on rewrite; §5a+§5b pass; relief-keeper canon fixed + reveal-ownership fixed (P15 no longer pre-empts ch06); 1 editorial reject |
+| 04 | The Rhythm | approved | 1012 | 0 | 4 | v4 approved; §5a+§5b pass; owns answering-night (dramatised here), present-time anchored both ends, no forward-reach |
+| 05 | What She Stayed For | approved | 1097 | 1 | 4 | v4 approved; §5a (after 1 length bounce) + §5b pass; doorway referenced-not-restaged (no ch02 overlap), pacing has present-time motion, vigil reframing owned |
+| 06 | The Automation's Lie | approved | 1007 | 0 | 4 | v4 approved; §5a+§5b pass; toward→towards fixed; 17+3=20yr span explicit + canon-true; owns automation verdict (confined to sending side, ch07 open) |
+| 07 | The Thing in the Log | approved | 924 | 0 | 4 | v4 approved; §5a+§5b pass; ambiguity peak fully intact (hedges preserved verbatim); the-way 2→1 |
+| 08 | The Long Watch | approved | 929 | 0 | 4 | v4 approved; §5a+§5b pass; the-way 7→1 (densest chunk), hand-kept-watch prose intact |
+| 09 | First Light | approved | 944 | 0 | 4 | v4 approved; §5a+§5b pass; the-way 3→1, "small competent" removed; ch01 callbacks + key/watch choice preserved |
+| 10 | The Beacon | approved | 922 | 0 | 4 | v4 approved; §5a+§5b pass; toward→towards fixed; coda undisturbed (recolourings + double-hedged final line intact) |
 
 ### Status values
 

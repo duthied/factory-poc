@@ -1,2 +1,3 @@
 run,date,slug,spec_ver,final_status,words,target,within_tolerance,eval_verdict,eval_overall,eval_rounds,score_arc,score_ambiguity,score_voice,score_pacing,score_prose,score_coda,score_themes,chunks_planned,chunks_approved,rewrites_total,bounce_dash,bounce_length,bounce_prose_only,bounce_spelling,bounce_second_person,editorial_rejects,friction
 01,2026-08-30,lighthouse,3,complete-eval-passed,9709,10000,yes,PASS,4.4,1,4,5,4,4,4,5,5,10,10,1,0,0,0,0,0,1,chunk-04 reply dropped ~13min recovered from review-log
+02,2026-08-30,lighthouse,4,complete-eval-passed,10030,10000,yes,PASS,4.7,1,5,5,5,4,4,5,5,10,10,2,0,1,0,0,0,1,builder session down spawned subagent no stalls
