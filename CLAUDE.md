@@ -49,6 +49,15 @@ Single-writer discipline avoids three sessions racing on the same file.
 Append-only files (`review-log.md`, `learnings.md`) are safe for concurrent
 appends.
 
+**The `runs/` directory is different: it is persistent and never reset or
+archived.** Everything under `state/` describes the *current* run and gets reset
+or archived when a new run starts; `runs/` accumulates one immutable entry per
+completed run (metrics + a retrospective), plus per-run trend rows in
+`runs/INDEX.md` (human-readable Quality and Process matrices) and
+`runs/metrics.csv` (the same numbers, machine-readable), so the human can see how
+each metric changes over time and what keeps needing to improve. The orchestrator
+writes all of these as the last step of every run.
+
 ## Chunk lifecycle
 
 ```

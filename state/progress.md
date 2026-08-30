@@ -12,6 +12,15 @@ orchestrator changes status. Seeded from `spec.md` §4 at the start of a run.
 - **Eval rounds used:** 0 of 2
 - **Latest eval:** not yet run (see `state/eval-report.md`)
 
+### Run counters (orchestrator maintains during the run; dumped into the run log at completion)
+
+- Mechanical-gate bounces by type: em/en-dash 0, length 0, prose-only 0, UK-spelling 0, second-person 0
+- Editorial rejects (reviewer FAIL): 0
+- Process friction: none noted (silent-turn stalls, unreachable agents, timeouts)
+
+The per-chunk `Retries` column already records total rewrites per chunk; these
+counters break that total down by cause for the run log.
+
 `Spec-ver` records the Spec-Version each chunk was approved under. On startup the
 orchestrator compares it to the current Spec-Version; any `approved` chunk with a
 lower value is stale and gets re-queued for a revision pass.

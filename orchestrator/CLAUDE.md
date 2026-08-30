@@ -56,9 +56,11 @@ Repeat until done:
    UK spelling; plus the assisted second-person grep). These are cheap and
    deterministic.
    - **Any hard gate fails** → do **not** spend a reviewer turn. Increment
-     Retries (a mechanical bounce still counts toward the cap). If Retries ≥ 3 →
-     `needs-human`; else set `rejected` with the exact failing check + offending
-     lines in Notes and loop back to step 1 for a rewrite.
+     Retries (a mechanical bounce still counts toward the cap) **and increment the
+     matching Run counter** (em/en-dash, length, prose-only, or UK-spelling) in
+     `progress.md`. If Retries ≥ 3 → `needs-human`; else set `rejected` with the
+     exact failing check + offending lines in Notes and loop back to step 1 for a
+     rewrite.
    - **Second-person grep has hits** → pass them to the reviewer to adjudicate
      (dialogue is allowed; narration is not) rather than auto-failing.
    - **All hard gates pass** → set `queued-for-review` and dispatch the reviewer
@@ -73,9 +75,12 @@ Repeat until done:
 5. **On reviewer reply:**
    - `PASS` → set `approved`, stamp its `Spec-ver` with the current
      Spec-Version, add its words to the approved total.
-   - `FAIL` → increment Retries. If Retries ≥ 3 → set `needs-human`, pause, and
-     tell the human. Else set `rejected` with the reason in Notes and loop back
-     to step 1 for a rewrite.
+   - `FAIL` → increment Retries **and the "Editorial rejects" Run counter**. If
+     Retries ≥ 3 → set `needs-human`, pause, and tell the human. Else set
+     `rejected` with the reason in Notes and loop back to step 1 for a rewrite.
+
+If a session stalls (no reply), is unreachable, or times out at any point, note
+it in the "Process friction" Run counter so it lands in the run log.
 
 6. Update `../state/progress.md` after every transition. Go to step 1.
 
@@ -115,6 +120,35 @@ When target met and all chunks `approved`:
 
 Keep an **eval-round counter** line in the `progress.md` Summary so the 2-round
 cap survives across turns.
+
+## Log the run (always the last step)
+
+The moment a run reaches a terminal state (`complete (eval-passed)` **or**
+`needs-human`), write a run-log entry. This is what lets the human see what to
+improve across runs, and it is the **only** persistent record: `state/` gets
+reset or archived between runs, but `../runs/` never does.
+
+1. Copy `../runs/TEMPLATE.md` into `../runs/YYYY-MM-DD-<slug>-runNN.md`
+   (`<slug>` names the work, e.g. `lighthouse`; `NN` increments per work, so
+   check the existing files/`INDEX.md` for the next number).
+2. Fill the **Metrics** from this run's files, objectively: final word count and
+   target from `progress.md`; chunks planned/approved and per-chunk Retries from
+   the chunk table; the mechanical-bounce breakdown, editorial-reject count, and
+   process friction from the Run counters; eval rounds and per-dimension scores
+   from the latest `state/eval-report.md` round.
+3. Fill the **Retrospective** from `review-log.md`, `eval-report.md`, and
+   `learnings.md`: the weakest dimension(s) and which chunks caused them, any
+   pattern that also appeared in a prior run (skim earlier `runs/` files), what
+   was promoted to the spec this run, and one concrete suggested spec/steering
+   change. Be honest; this log exists to improve the factory.
+4. Append this run's metrics to the trend records (newest at the bottom), using
+   the **same** deterministic numbers from step 2 so all three agree:
+   - one row to the **Quality trend** table in `../runs/INDEX.md` (eval scores),
+   - one row to the **Process trend** table in `../runs/INDEX.md` (effort/friction),
+   - one row to `../runs/metrics.csv` (the full flat row; match the header order
+     exactly, use a plain number or `NA`, no commas inside a field).
+5. Report to the human that the run log is written, with the path, and note any
+   metric that moved sharply from the previous run.
 
 ## Rules
 

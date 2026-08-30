@@ -97,6 +97,37 @@ finished.
 - **`spec.md` §7 Canon** is the growing list of fixed facts (characters, timeline,
   recurring images) so continuity does not depend on re-reading every prior chunk.
 
+### The run log
+
+`state/` describes the *current* run and is reset or archived when a new run
+starts, so it cannot tell you whether the factory is improving. The **`runs/`**
+directory fills that gap: it is persistent and never reset. As the last step of
+every run, the orchestrator writes an immutable
+`runs/YYYY-MM-DD-<slug>-runNN.md` with two parts:
+
+- **Deterministic metrics** drawn from the run's own files: final word count vs.
+  target, chunks planned/approved, total rewrites broken down into mechanical
+  gate bounces (by type) versus editorial rejects, per-chunk retries, eval rounds
+  used, the eval score per dimension, and any process friction (stalls,
+  unreachable agents).
+- **A short retrospective**: the weakest dimension and which chunks caused it,
+  any pattern recurring from earlier runs, what was promoted into the spec, and
+  one concrete suggested improvement.
+
+To see the metrics change run over run, the orchestrator also appends the
+numbers to two trend records each run:
+
+- **`runs/INDEX.md`** holds two human-readable matrices, one row per run: a
+  **Quality trend** (the seven eval scores + overall) and a **Process trend**
+  (rewrites, mechanical bounces by type, editorial rejects, eval rounds,
+  friction). Read down any column to watch that metric move across runs.
+- **`runs/metrics.csv`** is the same data as one flat row per run, machine
+  readable for sorting, diffing, or charting a metric over time.
+
+The per-run markdown files carry the narrative retrospective; the matrices and
+CSV carry the numbers over time. Together they are what you read when deciding
+what to change about the spec or the agents' steering.
+
 ## Layout
 
 ```
@@ -110,6 +141,7 @@ factory-poc/
 │   └── eval-report.md    # Append-per-round holistic scores (evaluator-owned)
 ├── chunks/               # chunk-NN.md written here (writer)
 ├── output/               # Final assembled deliverable (builder)
+├── runs/                 # Persistent per-run log (metrics + retrospective) + INDEX.md
 ├── archive/              # Superseded runs (e.g. v2-literary/), preserved
 ├── orchestrator/CLAUDE.md
 ├── writer/CLAUDE.md
