@@ -8,6 +8,8 @@ and assembles the work chunk by chunk until it hits that target.
 It is deliberately file-first and model-agnostic: the coordination lives in plain
 markdown files on disk, so a run is inspectable, resumable, and diffable in git.
 
+> New to the concept? Start with **[software-factories-a-primer.md](software-factories-a-primer.md)** — a 2-minute tour of what a software factory is, the parts, the techniques, the results, and how the pattern maps to building software instead of stories.
+
 ## The idea
 
 One long deliverable is hard to generate well in a single pass. So the work is
