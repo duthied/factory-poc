@@ -23,3 +23,5 @@ Entry format:
 ---
 
 <!-- learnings appended below -->
+
+- [2026-08-30] (from chunk-02) Before stating any numeric age or duration for Maren, check it against §7 canon arithmetic: arrival at 19, departure at 41, so any span describing "years of keeping" has a hard ceiling of 22 years (likely less, since becoming keeper followed arrival by some interval). Prefer a vaguer phrase ("more than twenty years") over a precise number that canon math could contradict.

@@ -32,7 +32,42 @@ You are the **only** agent that writes `../state/progress.md`.
    per chunk, first chunk `queued-for-writing`, the rest `pending`; fill in the
    Summary target and Spec-Version.
 4. Confirm the `writer` and `reviewer` sessions are reachable (`ListAgents`).
-5. Dispatch the first outstanding chunk (see Loop).
+5. **Open the run journal.** Create `../runs/YYYY-MM-DD-<slug>-runNN.md` from
+   `../runs/TEMPLATE.md` now, at the start of the run (not the end). Write the
+   header and the `## Timeline (live)` section, and append the first timestamped
+   line ("run started ..."). You will append to this file throughout the run.
+6. Dispatch the first outstanding chunk (see Loop).
+
+## Heartbeat and self-recovery (durable files are the real signal)
+
+Reply messages are an optimization, not a guarantee: a dropped reply must never
+stall the run. **The durable files are the authoritative completion signal.**
+After every dispatch you poll for the expected file change rather than ending
+your turn to wait on a message.
+
+Expected signal per dispatch:
+- Writer → `../chunks/chunk-NN.md` created or updated (newer mtime, non-empty).
+- Reviewer → a new `## chunk-NN — attempt A` block in `../state/review-log.md`.
+- Builder → the deliverable file in `../output/` (spec §6) created/updated.
+- Evaluator → a new round appended to `../state/eval-report.md`.
+
+The heartbeat, after each dispatch:
+
+1. **Do not end your turn to wait.** Enter a bounded polling wait for the
+   expected signal, checking about every 30 seconds (use the Monitor tool or an
+   until-loop; foreground `sleep` is blocked).
+2. **Signal appears** → proceed. If the reply message also arrives, it is just
+   confirmation; ignore a duplicate.
+3. **~5 minutes with no signal** → treat it as a possible dropped message: append
+   a "Process friction" note in `progress.md`, **re-send the same dispatch
+   once**, and poll again.
+4. **A second ~5-minute window with no signal** → check the target with
+   `ListAgents`. If it is unreachable or still produces nothing, set the chunk (or
+   run) to `needs-human` with a clear note and stop. Never spin silently.
+
+Because you read the file rather than block on the reply, a dropped notification
+costs one poll interval, not the whole run. Log every recovery in the "Process
+friction" counter so it surfaces in the run log.
 
 ## The loop
 
@@ -82,7 +117,10 @@ Repeat until done:
 If a session stalls (no reply), is unreachable, or times out at any point, note
 it in the "Process friction" Run counter so it lands in the run log.
 
-6. Update `../state/progress.md` after every transition. Go to step 1.
+6. Update `../state/progress.md` after every transition, **and append a
+   timestamped line to the run journal's Timeline** (dispatch, gate result and
+   any bounce, review verdict, approval with the running approved-word total).
+   The journal grows live so the run can be watched as it happens. Go to step 1.
 
 ## Finish
 
@@ -128,9 +166,11 @@ The moment a run reaches a terminal state (`complete (eval-passed)` **or**
 improve across runs, and it is the **only** persistent record: `state/` gets
 reset or archived between runs, but `../runs/` never does.
 
-1. Copy `../runs/TEMPLATE.md` into `../runs/YYYY-MM-DD-<slug>-runNN.md`
-   (`<slug>` names the work, e.g. `lighthouse`; `NN` increments per work, so
-   check the existing files/`INDEX.md` for the next number).
+1. The journal file `../runs/YYYY-MM-DD-<slug>-runNN.md` already exists (you
+   opened it in startup step 5 and have been appending Timeline lines throughout,
+   including the assembly and per-round eval lines from Finish). Now **finalize**
+   it: append the `## Outcome`, `## Metrics`, and `## Retrospective` blocks from
+   `../runs/TEMPLATE.md`.
 2. Fill the **Metrics** from this run's files, objectively: final word count and
    target from `progress.md`; chunks planned/approved and per-chunk Retries from
    the chunk table; the mechanical-bounce breakdown, editorial-reject count, and

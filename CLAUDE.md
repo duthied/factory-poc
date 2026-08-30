@@ -56,7 +56,9 @@ completed run (metrics + a retrospective), plus per-run trend rows in
 `runs/INDEX.md` (human-readable Quality and Process matrices) and
 `runs/metrics.csv` (the same numbers, machine-readable), so the human can see how
 each metric changes over time and what keeps needing to improve. The orchestrator
-writes all of these as the last step of every run.
+opens the per-run file at the *start* of a run and appends a timestamped Timeline
+line at every transition (so it can be watched live), then finalizes it and
+appends the `INDEX.md` / `metrics.csv` rows at completion.
 
 ## Chunk lifecycle
 

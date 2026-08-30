@@ -1,0 +1,16 @@
+# Do not commit generated story prose (privacy).
+# The factory's scaffolding, spec, state logs, run metrics, and steering ARE
+# tracked; only the prose the writer/builder produce is kept off the remote.
+
+# Per-chunk prose (all runs)
+/chunks/*
+!/chunks/.gitkeep
+
+# Assembled deliverables (the final stories)
+/output/*
+!/output/.gitkeep
+
+# Archived story prose from superseded runs (keep the logs, e.g. review-log.md,
+# eval-report.md, progress.md — only prose is ignored)
+/archive/**/chunk-*.md
+/archive/v2-literary/the-lighthouse-at-kestrel-point.md

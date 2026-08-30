@@ -7,16 +7,16 @@ orchestrator changes status. Seeded from `spec.md` §4 at the start of a run.
 
 - **Spec-Version:** 3
 - **Target:** 10,000 words (plus or minus 10%)
-- **Approved so far:** 0 words
-- **Run status:** not started (v3 science-fiction reconception; ready to begin)
-- **Eval rounds used:** 0 of 2
-- **Latest eval:** not yet run (see `state/eval-report.md`)
+- **Approved so far:** 9709 words
+- **Run status:** complete (eval-passed)
+- **Eval rounds used:** 1 of 2
+- **Latest eval:** Round 1 PASS — overall 4.4 / 5, no dimension below 4 (see `state/eval-report.md`)
 
 ### Run counters (orchestrator maintains during the run; dumped into the run log at completion)
 
 - Mechanical-gate bounces by type: em/en-dash 0, length 0, prose-only 0, UK-spelling 0, second-person 0
-- Editorial rejects (reviewer FAIL): 0
-- Process friction: none noted (silent-turn stalls, unreachable agents, timeouts)
+- Editorial rejects (reviewer FAIL): 1
+- Process friction: 1 — silent stall ~13 min on chunk-04: reviewer's PASS reply dropped; recovered from state/review-log.md (durable source of truth)
 
 The per-chunk `Retries` column already records total rewrites per chunk; these
 counters break that total down by cause for the run log.
@@ -29,16 +29,16 @@ lower value is stale and gets re-queued for a revision pass.
 
 | # | Title | Status | Words | Retries | Spec-ver | Notes |
 |---|-------|--------|-------|---------|----------|-------|
-| 01 | The Road Back | queued-for-writing | — | 0 | — | seed faint wrongness in the lamp's rhythm |
-| 02 | The Keeper's Room | pending | — | 0 | — | plant that the logs were never weather/shipping |
-| 03 | The Ledger | pending | — | 0 | — | old logbooks; light's true work surfaces |
-| 04 | The Rhythm | pending | — | 0 | — | predecessor teaches the cadence; the one rule |
-| 05 | What She Stayed For | pending | — | 0 | — | Tomas refusal reframed as the vigil's cost |
-| 06 | The Automation's Lie | pending | — | 0 | — | machine keeps the flash, not the true rhythm |
-| 07 | The Thing in the Log | pending | — | 0 | — | ambiguous response; do not resolve |
-| 08 | The Long Watch | pending | — | 0 | — | keeps one night watch by hand; the toll |
-| 09 | First Light | pending | — | 0 | — | dawn; the choice about the key; ch01 callback |
-| 10 | The Beacon | pending | — | 0 | — | coda; recolour ch01 images; leave it open |
+| 01 | The Road Back | approved | 1098 | 0 | 3 | passed §5a + §5b |
+| 02 | The Keeper's Room | approved | 1071 | 1 | 3 | passed on rewrite (canon fix) |
+| 03 | The Ledger | approved | 953 | 0 | 3 | passed §5a + §5b |
+| 04 | The Rhythm | approved | 925 | 0 | 3 | passed §5a + §5b (verdict recovered from review-log; live reply dropped) |
+| 05 | What She Stayed For | approved | 999 | 0 | 3 | passed §5a + §5b |
+| 06 | The Automation's Lie | approved | 937 | 0 | 3 | passed §5a + §5b |
+| 07 | The Thing in the Log | approved | 925 | 0 | 3 | passed §5a + §5b (ambiguity peak held) |
+| 08 | The Long Watch | approved | 935 | 0 | 3 | passed §5a + §5b |
+| 09 | First Light | approved | 942 | 0 | 3 | passed §5a + §5b (ch01 callbacks land) |
+| 10 | The Beacon | approved | 924 | 0 | 3 | passed §5a + §5b (final ambiguity holds; recolourings land) |
 
 ### Status values
 

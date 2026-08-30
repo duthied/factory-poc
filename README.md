@@ -101,9 +101,11 @@ finished.
 
 `state/` describes the *current* run and is reset or archived when a new run
 starts, so it cannot tell you whether the factory is improving. The **`runs/`**
-directory fills that gap: it is persistent and never reset. As the last step of
-every run, the orchestrator writes an immutable
-`runs/YYYY-MM-DD-<slug>-runNN.md` with two parts:
+directory fills that gap: it is persistent and never reset. The orchestrator
+opens a per-run file `runs/YYYY-MM-DD-<slug>-runNN.md` at the *start* of the run
+and appends a timestamped line to its `## Timeline` at every transition, so it
+can be read mid-run to watch progress. At completion it finalizes that same file
+with two more parts:
 
 - **Deterministic metrics** drawn from the run's own files: final word count vs.
   target, chunks planned/approved, total rewrites broken down into mechanical
@@ -186,10 +188,14 @@ em-dashes) that triggered a revision pass across all three chunks.
 
 This is a POC. Known rough edges, roughly in priority order:
 
-- **The notification channel is load-bearing.** The loop relies on each agent
-  reliably sending a message back on every transition; if one forgets, the loop
-  parks silently and you fall back to reading `state/progress.md`. A polling
-  heartbeat and timeouts would harden it.
+- **The notification channel is a convenience, not a dependency.** Reply
+  messages between agents can be dropped, so the orchestrator treats the
+  **durable files as the authoritative completion signal**: after each dispatch
+  it polls for the expected file change (the written chunk, a new review-log
+  verdict, the assembled output, a new eval round) with a heartbeat, re-dispatches
+  once on a timeout, and escalates to `needs-human` rather than stalling. A
+  dropped notification costs one poll interval, not the run. (This was added
+  after a real run stalled ~13 minutes on a dropped review reply.)
 - **`state/progress.md` is hand-edited markdown.** A JSON source of truth with a
   rendered markdown view would be less brittle across sessions.
 - **Continuity relies partly on re-reading prior chunks.** The §7 canon reduces

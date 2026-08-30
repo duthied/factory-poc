@@ -9,9 +9,28 @@ Draw the **metrics** from the run's own files (`state/progress.md` run counters,
 **retrospective** from the same files plus `state/learnings.md`. Keep it honest;
 this log exists to improve the factory, not to flatter a run.
 
+The file is a **live journal**: the orchestrator creates it at run start with the
+Timeline section and appends a timestamped line at every transition, then adds
+the Outcome / Metrics / Retrospective blocks at completion. So it can be read
+mid-run to watch progress, and ends as the full record.
+
 ---
 
 # Run YYYY-MM-DD — <slug> — Spec-Version V — run NN
+
+## Timeline (live; appended at every transition)
+
+```
+HH:MM  run started (Spec-Version V, target NNNN)
+HH:MM  chunk NN dispatched to writer
+HH:MM  chunk NN written, NNNN words
+HH:MM  chunk NN §5a gates: pass | BOUNCE <type> (counter++)
+HH:MM  chunk NN review: PASS | FAIL <reason>
+HH:MM  chunk NN approved (approved total NNNN / target)
+HH:MM  all chunks approved; builder assembling
+HH:MM  eval round R: <dim scores>; verdict PASS|FAIL
+HH:MM  run complete | needs-human
+```
 
 ## Outcome
 - Deliverable: `output/<file>.md` (NNNN words / <target> target, within/outside tolerance)

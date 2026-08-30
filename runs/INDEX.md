@@ -14,13 +14,13 @@ last step of every run (whether it finished `complete` or stopped at
 
 | Run | Date | Spec-ver | Words | Eval | Overall | Arc | Ambig | Voice | Pacing | Prose | Coda | Themes |
 |-----|------|----------|-------|------|---------|-----|-------|-------|--------|-------|------|--------|
-| _(none yet)_ | | | | | | | | | | | | |
+| 01 | 2026-08-30 | 3 | 9709 | PASS | 4.4 | 4 | 5 | 4 | 4 | 4 | 5 | 5 |
 
 ## Process trend (effort & friction)
 
 | Run | Date | Chunks (appr/plan) | Rewrites | Dash | Length | Prose-only | Spelling | 2nd-person | Ed. rejects | Eval rounds | Friction |
 |-----|------|--------------------|----------|------|--------|------------|----------|------------|-------------|-------------|----------|
-| _(none yet)_ | | | | | | | | | | | |
+| 01 | 2026-08-30 | 10/10 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | chunk-04 reply dropped, ~13min stall, recovered from review-log |
 
 Column notes: **Dash / Length / Prose-only / Spelling / 2nd-person** are
 mechanical-gate bounce counts by type; **Ed. rejects** are editorial reviewer
