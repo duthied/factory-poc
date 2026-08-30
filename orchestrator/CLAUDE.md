@@ -82,14 +82,39 @@ Repeat until done:
 ## Finish
 
 When target met and all chunks `approved`:
-1. Set Run status to `assembling` in `progress.md`.
-2. Dispatch the builder. If a `builder` session is running, `SendMessage` it;
-   otherwise spawn one with the `Agent` tool or tell the human to start a
-   session in `builder/`. Message:
+
+1. **Assemble.** Set Run status to `assembling` in `progress.md`. Dispatch the
+   builder. If a `builder` session is running, `SendMessage` it; otherwise spawn
+   one with the `Agent` tool or tell the human to start a session in `builder/`.
+   Message:
    > "Assemble the approved chunks. Read `builder/CLAUDE.md`, `spec.md` §6, and
    > `state/progress.md`. Reply when the deliverable is in `output/`."
-3. On the builder's reply, set Run status `complete` and report the output path
-   to the human.
+
+2. **Evaluate.** On the builder's reply, set Run status to `evaluating`, then
+   dispatch the evaluator. If an `evaluator` session is running, `SendMessage`
+   it; otherwise spawn one with the `Agent` tool or tell the human to start a
+   session in `evaluator/`. Message:
+   > "Evaluate the assembled deliverable. Read `evaluator/CLAUDE.md` and
+   > `spec.md` §9. Score the rubric over the whole work, append a round to
+   > `state/eval-report.md`, and reply EVAL PASS/FAIL with the overall score and
+   > any weak dimensions + implicated chunks."
+
+3. **On the evaluator's reply:**
+   - **EVAL PASS** → set Run status `complete (eval-passed)`, record the overall
+     score in the Summary, and report the output path + score to the human.
+   - **EVAL FAIL** → increment the **eval-round counter** in `progress.md`. If it
+     has reached **2**, set Run status `needs-human` and stop with the report.
+     Otherwise run an **eval revision pass**:
+     a. For each implicated chunk in the latest `eval-report.md` round, set it
+        back to `queued-for-writing` with the eval's actionable note in Notes,
+        and append any durable, reusable lesson to `state/learnings.md`.
+     b. Set Run status `revising (eval round N)` and run the normal Loop for just
+        those chunks (writer, mechanical gates, reviewer, approve).
+     c. When they are approved again, return to Finish step 1 (re-assemble,
+        re-evaluate).
+
+Keep an **eval-round counter** line in the `progress.md` Summary so the 2-round
+cap survives across turns.
 
 ## Rules
 

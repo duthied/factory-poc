@@ -20,6 +20,7 @@ agents each do one job:
 | **Writer** | Writes (or revises) one chunk at a time when asked, saves it to `chunks/`, and reports back. |
 | **Reviewer** | Judges a chunk against the spec's editorial criteria, records a verdict, and logs reusable lessons. |
 | **Builder** | Once every chunk is approved and the target is met, assembles the chunks into the final deliverable in `output/`. Runs once, at the end. |
+| **Evaluator** | Judges the *whole* assembled deliverable against a spec-defined rubric (arc, sustained ambiguity, voice consistency, pacing, prose, coda, themes), scores each dimension, and writes `state/eval-report.md`. A failing eval sends specific chunks back for revision. |
 
 Each agent is a **separate Claude session** running in its own folder, so it loads
 only its own role steering and does not inherit another role's context.
@@ -65,6 +66,12 @@ queued-for-writing → written → [mechanical gates §5a] → queued-for-review
      After 3 failures it is flagged `needs-human`.
 5. When cumulative approved words reach the target and every chunk is approved,
    the **builder** assembles them into `output/`.
+6. The **evaluator** then judges the assembled whole against the spec's rubric
+   (`spec.md` §9), scoring each dimension 1 to 5 into `state/eval-report.md`. A
+   **PASS** (overall mean at least 4.0 and no dimension below 3) finishes the
+   run; a **FAIL** names the specific chunks behind each weak dimension, which
+   the orchestrator re-queues for revision before re-assembling and
+   re-evaluating (up to two rounds, then it stops for a human).
 
 Only the orchestrator moves a chunk between phases, so three live sessions never
 race on `state/progress.md`. The append-only logs (`review-log.md`,
@@ -99,13 +106,16 @@ factory-poc/
 ├── state/
 │   ├── progress.md       # Coordination bus + per-chunk status (orchestrator-owned)
 │   ├── review-log.md     # Append-only reviewer verdicts
-│   └── learnings.md      # Append-only working guidance for the writer
+│   ├── learnings.md      # Append-only working guidance for the writer
+│   └── eval-report.md    # Append-per-round holistic scores (evaluator-owned)
 ├── chunks/               # chunk-NN.md written here (writer)
 ├── output/               # Final assembled deliverable (builder)
+├── archive/              # Superseded runs (e.g. v2-literary/), preserved
 ├── orchestrator/CLAUDE.md
 ├── writer/CLAUDE.md
 ├── reviewer/CLAUDE.md
-└── builder/CLAUDE.md
+├── builder/CLAUDE.md
+└── evaluator/CLAUDE.md
 ```
 
 Because Claude Code loads `CLAUDE.md` files from the current directory up the
@@ -117,8 +127,9 @@ role steering, and nothing else. That is the context isolation.
 1. **Fill in `spec.md`** with the real work: title, target length, voice, the
    chunk outline (§4), the acceptance criteria (§5), and assembly rules (§6).
 2. **Start the agent sessions.** Open a Claude session in `writer/` and one in
-   `reviewer/` (and, at the end, `builder/` — or let the orchestrator spawn a
-   builder subagent). The orchestrator session is the driver.
+   `reviewer/` (and, at the end, `builder/` and `evaluator/` — or let the
+   orchestrator spawn those two as subagents). The orchestrator session is the
+   driver.
 3. **Tell the orchestrator "begin".** It validates the spec, seeds
    `state/progress.md` from the outline, confirms the writer and reviewer are
    reachable, and dispatches the first chunk.
