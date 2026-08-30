@@ -54,6 +54,7 @@ lower value is stale and gets re-queued for a revision pass.
 
 - `not started` / `in progress` — the chunk loop is running
 - `assembling` — all chunks approved; builder is assembling the deliverable
+- `whole-work checks` — running the §5c deterministic checks on the assembled whole (before eval)
 - `evaluating` — evaluator is scoring the assembled whole (`spec.md` §9)
 - `revising (eval round N)` — eval failed; implicated chunks are being reworked
 - `complete (eval-passed)` — evaluator PASS; run finished

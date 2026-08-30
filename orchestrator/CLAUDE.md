@@ -133,7 +133,22 @@ When target met and all chunks `approved`:
    > "Assemble the approved chunks. Read `builder/CLAUDE.md`, `spec.md` §6, and
    > `state/progress.md`. Reply when the deliverable is in `output/`."
 
-2. **Evaluate.** On the builder's reply, set Run status to `evaluating`, then
+2. **Whole-work mechanical checks (§5c) — run BEFORE the evaluator.** On the
+   builder's reply, set Run status to `whole-work checks` and run the §5c checks
+   yourself against the assembled deliverable: the signature-construction cap,
+   distinctive-phrase repetition, spelling-variant consistency, and near-duplicate
+   passage detection. These are cheap and deterministic, like §5a but over the
+   whole.
+   - **Any §5c check fails** → do **not** dispatch the evaluator yet. Identify the
+     implicated chunk(s), set them back to `queued-for-writing` with the specific
+     finding (offending phrase/lines/counts) in Notes, append a "Process friction"
+     or the relevant Run counter note, and run the normal Loop to revise them,
+     then return to Finish step 1 (re-assemble, re-check). Treat repeated §5c
+     failure under the retry cap like any other, escalating to `needs-human`.
+   - **All §5c checks pass** → proceed to Evaluate. Log the §5c pass to the run
+     journal.
+
+3. **Evaluate.** Set Run status to `evaluating`, then
    dispatch the evaluator. If an `evaluator` session is running, `SendMessage`
    it; otherwise spawn one with the `Agent` tool or tell the human to start a
    session in `evaluator/`. Message:
@@ -142,7 +157,7 @@ When target met and all chunks `approved`:
    > `state/eval-report.md`, and reply EVAL PASS/FAIL with the overall score and
    > any weak dimensions + implicated chunks."
 
-3. **On the evaluator's reply:**
+4. **On the evaluator's reply:**
    - **EVAL PASS** → set Run status `complete (eval-passed)`, record the overall
      score in the Summary, and report the output path + score to the human.
    - **EVAL FAIL** → increment the **eval-round counter** in `progress.md`. If it

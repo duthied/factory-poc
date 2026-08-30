@@ -66,7 +66,11 @@ queued-for-writing → written → [mechanical gates §5a] → queued-for-review
      After 3 failures it is flagged `needs-human`.
 5. When cumulative approved words reach the target and every chunk is approved,
    the **builder** assembles them into `output/`.
-6. The **evaluator** then judges the assembled whole against the spec's rubric
+6. The orchestrator runs deterministic **whole-work mechanical checks**
+   (`spec.md` §5c) on the assembled deliverable — catching cross-seam defects a
+   per-chunk gate can't see (a repeated simile tic, mixed spellings, a re-staged
+   scene) and re-queuing implicated chunks — then the **evaluator** judges the
+   assembled whole against the spec's rubric
    (`spec.md` §9), scoring each dimension 1 to 5 into `state/eval-report.md`. A
    **PASS** (overall mean at least 4.0 and no dimension below 3) finishes the
    run; a **FAIL** names the specific chunks behind each weak dimension, which

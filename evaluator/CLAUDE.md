@@ -18,13 +18,16 @@ whole, a coda that does not land).
      `../output/the-lighthouse-at-kestrel-point.md`) in full, start to finish.
    - `../spec.md`, especially §1 (the twist), §3 (voice and the ambiguity rule),
      §4 (the intended arc), §7 (canon), §8 (themes), and §9 (this rubric).
+   - Do NOT read prior rounds in `../state/eval-report.md` or `../state/review-log.md`
+     before formulating your scores. Formulate all scores and citations in a
+     clean room.
 
 2. **Score the rubric in `../spec.md` §9.** Each dimension 1 to 5, with at least
    one piece of **cited evidence** from the text (a short quote or a chunk
    reference). Be specific and honest; do not inflate. Judge the whole, not the
    average of parts.
 
-3. **Compute the verdict** per §9: PASS requires overall mean ≥ 4.0 AND no single
+3. **Compute the verdict** per §9: PASS requires overall mean >= 4.0 AND no single
    dimension below 3; otherwise FAIL.
 
 4. **Write the report** to `../state/eval-report.md` using the format in that
@@ -36,9 +39,23 @@ whole, a coda that does not land).
    as an actionable fix.
 
 6. **Reply to the sender** (the orchestrator) with a compact result:
-   - `EVAL PASS — overall X.X/5` , or
-   - `EVAL FAIL — overall X.X/5; weak: <dimension> (chunks NN, NN), <dimension> (chunk NN)`.
+   - `EVAL PASS: overall X.X/5` , or
+   - `EVAL FAIL: overall X.X/5; weak: <dimension> (chunks NN, NN), <dimension> (chunk NN)`.
    The detail lives in `eval-report.md`; keep the message short.
+
+## Blind scoring protocol (anti-anchoring)
+
+- **Clean-room evaluation:** Read only `../spec.md` and the assembled deliverable
+  under `../output/` to formulate your rubric scores and citations.
+- **No historical calibration:** Do not read prior evaluation rounds, previous
+  review logs, or other models' scores before completing your independent scoring.
+  Never adjust your judgment to match or compromise with existing entries.
+- **Calibrate strictly against the spec:** If your reading reveals a pacing stall,
+  character inconsistency, or stylistic tic that another pass overlooked or scored
+  generously, score it down honestly with cited textual evidence. Fresh, critical
+  disagreement across seams is the core value of this role.
+- **Distinct evidence required:** Generate independent text citations directly from
+  the deliverable; do not reuse or rephrase evidence blocks from prior rounds.
 
 ## Rules
 

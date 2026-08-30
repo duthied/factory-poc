@@ -1,6 +1,6 @@
 # Spec: The Lighthouse at Kestrel Point
 
-**Spec-Version:** 3
+**Spec-Version:** 4
 
 > Sample spec for exercising the factory end-to-end. A literary science-fiction
 > novelette in ten chunks.
@@ -15,6 +15,11 @@
 > no-em-dash rule, the impersonal-"you" clarification, and the §7 canon. v3:
 > reconceived as a 10,000-word literary science-fiction work (the beacon twist);
 > the earlier three-chunk literary version is archived under `archive/v2-literary/`.
+> v4: codified the run-01 evaluation findings, to lift the four dimensions that
+> scored 4/5 (Arc, Voice, Pacing, Prose) toward 5. Added §5c whole-work mechanical
+> gates (run at assembly, before the evaluator), extended the §5a UK-spelling
+> grep, added the §4 reveal ledger and §5b reveal/pacing rules, and elevated the
+> relief-keeper coverage in §7 to an explicit fact with a reviewer check.
 
 ## 1. Overview
 
@@ -86,7 +91,7 @@ its full weight without ever making it explicit.
 | # | Working title | What it must cover / accomplish |
 |---|---------------|---------------------------------|
 | 01 | The Road Back | Maren drives to Kestrel Point after twenty years. Establish her, the coastal setting, the automated light. Seed one faint wrongness: the lamp's turning does not keep quite the rhythm she remembers. End as she reaches the door. |
-| 02 | The Keeper's Room | Inside. Memory braids with the present: why she left, Tomas, duty versus the life she forwent. Plant that her nightly "logs" were never weather or shipping, but observations in a notation she followed without fully understanding. |
+| 02 | The Keeper's Room | Inside. Memory braids with the present: why she left, Tomas, duty versus the life she forwent. Seed, without stating it outright, that her nightly "logs" were kept in a private notation she followed without fully understanding. Hint that they tracked something other than ordinary weather or shipping, but leave the explicit discovery (that the records are not a keeper's log at all) to chunk 03 per the reveal ledger. |
 | 03 | The Ledger | She finds the old logbooks. The records are not what a keeper's log should be: columns of timings, marks against the turning of the lamp, a rhythm handed down and never explained. First real sense that the light's true work was not warning ships. |
 | 04 | The Rhythm | Memory: her predecessor teaching her the true cadence of the lamp, the one rule (never break the rhythm), and the night early in her keeping when the dark beyond the beam seemed, once, to keep time back. Establish the vigil as inheritance. |
 | 05 | What She Stayed For | Tomas and the refusal, reframed. Her "no" was not only duty or love of place; leaving would have broken the watch, and she half believed, without proof, what that might cost. Her refusal of a life was a yes to something vast and unprovable. |
@@ -95,6 +100,27 @@ its full weight without ever making it explicit.
 | 08 | The Long Watch | She keeps one night watch the old way, by hand, re-establishing the rhythm. The physical and emotional toll. The vigil as devotion, gathering her whole life into a single night. |
 | 09 | First Light | Dawn. The automated lamp cuts at first light. Maren makes a small, concrete choice about the key and the watch: to abandon the vigil to the machine and the unanswered deep, or to do one last true thing. Quiet, earned, not tidy. Callback to an image from chunk 01. |
 | 10 | The Beacon | Coda. The consequence of her choice, ambiguous and unspectacular. The light will come on at dusk "for the ships, and for no one", but she, and the reader, now know that is the lie, and something may or may not still be listening. Recolour the grey-plate horizon, the kept key, and the scald mark from earlier chunks. |
+
+### Reveal ledger (which chunk owns each disclosure)
+
+The strangeness escalates only if each beat lands in its assigned chunk. **A
+chunk must not disclose a beat owned by a later chunk** (in run 01, ch02
+pre-empted ch03's discovery). Earlier chunks may hint or seed by inference, but
+the first *explicit* surfacing of a beat belongs to its owner. The reviewer
+checks this per chunk (§5b).
+
+| Beat (first explicit surfacing) | Owner |
+|---------------------------------|-------|
+| Faint wrongness in the lamp's rhythm (seed only, unexplained) | 01 |
+| The logs use a private notation Maren followed without understanding | 02 |
+| The records are not a keeper's log; the light's work was not the ships | 03 |
+| The true cadence, its oral inheritance, and the one rule (never break it) | 04 |
+| The vigil as the real reason she refused to leave with Tomas | 05 |
+| The automation keeps the flash but not the true rhythm; the watch has lapsed | 06 |
+| A possible response, or the absence of one, held unresolved | 07 |
+| The full weight of the vigil kept by hand, its toll | 08 |
+| The choice about the key and the watch | 09 |
+| The consequence, left open; the public "for the ships" reframed as the lie | 10 |
 
 ## 5. Acceptance criteria
 
@@ -112,7 +138,9 @@ Any failure is an automatic bounce back to the writer.
 - [ ] **Length** 900 to 1,100 words. `wc -w chunks/chunk-NN.md`
 - [ ] **No em-dashes or en-dashes.** `grep -nP '[\x{2014}\x{2013}]' chunks/chunk-NN.md` returns nothing.
 - [ ] **Prose only**: no markdown headers or list bullets. `grep -nE '^\s*(#|[-*+] )' chunks/chunk-NN.md` returns nothing.
-- [ ] **UK spelling**: no common US spellings. `grep -niwE 'color|gray|harbor|honor|realize|meter|theater|traveled|neighbor|favor' chunks/chunk-NN.md` returns nothing. (Grep flags candidates; a genuine proper noun is the writer's to justify.)
+- [ ] **UK spelling**: no common US spellings, plus the `toward`/`afterward`
+  adverbs that drifted in run 01 (UK prefers `towards`/`afterwards`).
+  `grep -niwE 'color|gray|harbor|honor|realize|meter|theater|traveled|neighbor|favor|toward|afterward' chunks/chunk-NN.md` returns nothing. (Grep flags candidates; a genuine proper noun is the writer's to justify. Directional words valid in both dialects, e.g. forward/backward, are left to the §5c variant-consistency check rather than bounced here.)
 
 **Assisted check (grep surfaces candidates, reviewer adjudicates):**
 - [ ] **No second person in narration.** `grep -niwE 'you|your|yours' chunks/chunk-NN.md`; every hit must be inside dialogue, and any hit in narration fails. A pure grep cannot tell narration from dialogue, so the reviewer confirms each hit.
@@ -123,12 +151,48 @@ Any failure is an automatic bounce back to the writer.
   at the right point on the escalation curve (faint wrongness early, full weight
   late).
 - [ ] Voice/tone/POV/tense match §3 (third-person limited on Maren, past tense).
-- [ ] Continuity: consistent with the §7 canon and all approved chunks.
+- [ ] Continuity: consistent with the §7 canon and all approved chunks. In
+  particular, reconcile any claim about the station being unkept, empty, or
+  untended against the §7 relief-keeper fact (relief keepers held it for most of
+  the twenty years; it was not simply abandoned when Maren left).
+- [ ] Reveal ownership: the chunk does not disclose a beat the §4 reveal ledger
+  assigns to a later chunk (hinting or seeding by inference is fine; explicit
+  disclosure of a later chunk's beat is a fail).
+- [ ] Pacing and no re-staging: the chunk earns its place and, if it is
+  memory-heavy, still advances present-time or reframes rather than repeats. A
+  prior scene may be referenced but must not be re-dramatised in near-identical
+  wording.
 - [ ] No contradictions with the spec.
 - [ ] Shows rather than states Maren's interiority (no bald emotion-labelling).
 - [ ] **Ambiguity preserved:** the chunk never explicitly confirms or denies the
   non-human, never names or describes the listener, and contains no technobabble
   or exposition dump. The strange arrives by sensation and inference.
+
+### 5c. Whole-work mechanical checks (deterministic; run at assembly, before the evaluator)
+
+Some defects are invisible in a single chunk and only appear across the finished
+whole; in run 01 these cost points on Prose, Voice, and Pacing at the eval stage.
+The orchestrator runs these deterministic checks against the **assembled**
+deliverable (spec §6) after the builder finishes and **before** dispatching the
+evaluator. A failure re-queues the specific implicated chunks for revision (same
+mechanism as an eval FAIL: note the offending lines, revise, re-review,
+re-assemble, re-check), so the evaluator only ever sees a clean whole.
+
+- [ ] **Signature-construction cap.** The "the way …" simile construction must not
+  exceed roughly **1 per 800 words** across the whole (run 01 had ~38 in 9,700
+  words, about 1 per 250). Count: `grep -ioE 'the way (a|the|an|she|he|it|one|his|her|they|you)?' output/<file>.md | wc -l`, compared against `wc -w`. Over the cap → flag the densest chunks for varied phrasing.
+- [ ] **Distinctive-phrase repetition.** No distinctive (non-stock) phrase of 3+
+  words should recur **3 or more times** across the whole (run 01: "small
+  competent" ×4). Scan for repeated 3-to-5-word phrases and flag any that are
+  distinctive rather than ordinary connective language.
+- [ ] **Spelling-variant consistency.** No word should appear in two spellings
+  across chunks (run 01: `towards` ×3 vs `toward` ×2). Flag any word present in
+  both a UK and US form, or both an `-s` and non-`-s` directional form, anywhere
+  in the assembled text; the writer picks one and makes it consistent.
+- [ ] **Near-duplicate passage detection.** No scene may be re-dramatised in
+  near-identical wording in a later chunk (run 01: the Tomas doorway was re-staged
+  almost verbatim from ch02 in ch05). Flag long shared substrings or near-identical
+  sentences between chunks; a prior scene may be referenced but not repeated.
 
 ## 6. Assembly rules (for the builder)
 
@@ -150,8 +214,14 @@ established, so continuity does not depend on re-reading every prior chunk.
   and left at 41 (roughly 20 years ago); she has lived inland ever since. She
   did **not** keep the light into her late fifties.
 - The lighthouse was **automated about 3 years ago**. Maren learned of it by
-  letter, years after she had already left; she was long gone by then. Between
-  her leaving and the automation, one or more relief keepers held the station.
+  letter, years after she had already left; she was long gone by then.
+- **The station was NOT empty for the twenty years after Maren left.** Relief
+  keepers held it for roughly the seventeen years between her departure and the
+  automation about three years ago. So no chunk may describe the station, the
+  cottage, or the logs as untended or unmanned across that whole span. What the
+  relief keepers lost was the *true rhythm* (they kept the public light but not
+  the vigil), not the physical keeping. Only the last ~3 years, under the
+  machine, had no human keeper at all.
 - **Tomas** arrived the spring she was 38, off a survey boat. He asked her to
   leave with him for a white house above a bay in the south (olive trees). She
   chose the light and stayed, leaving three years later at 41.
@@ -189,10 +259,13 @@ established, so continuity does not depend on re-reading every prior chunk.
 
 ## 9. Final evaluation (rubric)
 
-After the builder assembles the deliverable, the **evaluator** judges the whole
-work (not individual chunks) against this rubric and writes the result to
-`state/eval-report.md`. This is a holistic pass: things a per-chunk reviewer
-cannot see, because they only emerge across the seams of the finished piece.
+After the builder assembles the deliverable **and the §5c whole-work mechanical
+checks pass**, the **evaluator** judges the whole work (not individual chunks)
+against this rubric and writes the result to `state/eval-report.md`. This is a
+holistic pass: things a per-chunk reviewer cannot see, because they only emerge
+across the seams of the finished piece. (§5c already removes the deterministic
+whole-work defects, so the evaluator can focus on judgment the rubric below
+calls for.)
 
 Score each dimension **1 to 5** (5 is best) with at least one piece of cited
 evidence from the text (a short quote or a chunk reference):

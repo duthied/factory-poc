@@ -92,9 +92,12 @@ it receives. Writer and reviewer report results; they do not change status.
 4. Reviewer → Orchestrator: "chunk-NN: PASS" or "chunk-NN: FAIL — <reason>".
 5. Orchestrator updates `progress.md` and either dispatches the next chunk or,
    when target met and all approved, tells the builder to assemble.
-6. After assembly the orchestrator dispatches the evaluator, which scores the
-   whole deliverable (`spec.md` §9) into `state/eval-report.md`. A PASS finishes
-   the run; a FAIL sends the implicated chunks back through the loop and
+6. After assembly the orchestrator runs the deterministic **whole-work mechanical
+   checks (`spec.md` §5c)** — signature-construction cap, distinctive-phrase
+   repetition, spelling-variant consistency, near-duplicate passages — and
+   re-queues implicated chunks on failure, before dispatching the evaluator, which
+   scores the whole deliverable (`spec.md` §9) into `state/eval-report.md`. A PASS
+   finishes the run; a FAIL sends the implicated chunks back through the loop and
    re-evaluates (up to 2 rounds, then `needs-human`).
 
 Every message names its sender and asks the recipient to **reply to sender**, so
